@@ -1,0 +1,62 @@
+from yacs.config import CfgNode as CN
+
+_C = CN()
+
+# Drug feature extractor
+_C.DRUG = CN()
+_C.DRUG.NODE_IN_FEATS = 75
+_C.DRUG.PADDING = True
+_C.DRUG.HIDDEN_LAYERS = [128, 128, 128]
+_C.DRUG.NODE_IN_EMBEDDING = 128
+_C.DRUG.MAX_NODES = 290
+
+# NEW: Mol2Vec configuration (organized under DRUG)
+_C.DRUG.USE_MOL2VEC = True  # ADDED: Master switch for Mol2Vec
+_C.DRUG.MOL2VEC_MODEL_PATH = "../models/mol2vec_trained.model"
+_C.DRUG.MAX_SMILES_LENGTH = 100
+_C.DRUG.MOL2VEC_EMBEDDING_DIM = 300
+
+# Protein feature extractor
+_C.PROTEIN = CN()
+_C.PROTEIN.NUM_FILTERS = [128, 128, 128]
+_C.PROTEIN.EMBEDDING_DIM = 128
+_C.PROTEIN.NUM_HEAD = 8
+_C.PROTEIN.PADDING = True
+
+# CrossIntention feature fusion
+_C.CROSSINTENTION = CN()
+_C.CROSSINTENTION.LAYER = 1
+_C.CROSSINTENTION.NUM_HEAD = 8
+_C.CROSSINTENTION.EMBEDDING_DIM = 128
+
+# MLP decoder
+_C.DECODER = CN()
+_C.DECODER.NAME = "MLP"
+# NOTE: When USE_MOL2VEC=True, actual input dim will be IN_DIM + MOL2VEC_EMBEDDING_DIM
+_C.DECODER.IN_DIM = 256  
+_C.DECODER.HIDDEN_DIM = 512
+_C.DECODER.OUT_DIM = 128
+_C.DECODER.BINARY = 1
+
+# SOLVER
+_C.SOLVER = CN()
+_C.SOLVER.MAX_EPOCH = 100
+_C.SOLVER.BATCH_SIZE = 64
+_C.SOLVER.NUM_WORKERS = 0
+_C.SOLVER.LR = 1e-4
+_C.SOLVER.USE_LD = True
+_C.SOLVER.LR_DECAY = 0.5
+_C.SOLVER.DECAY_INTERVAL = 25
+_C.SOLVER.WEIGHT_DECAY = 1e-5
+_C.SOLVER.SEED = 42
+_C.SOLVER.PATIENCE = 10
+_C.SOLVER.CHECKPOINT_INTERVAL = 5
+
+# RESULT
+_C.RESULT = CN()
+_C.RESULT.OUTPUT_DIR = r"../output/result/"
+_C.RESULT.SAVE_MODEL = True
+_C.RESULT.CHECKPOINT_DIR = r"../output/checkpoints/"
+
+def get_cfg_defaults():
+    return _C.clone()
