@@ -1,8 +1,7 @@
 ## BINDTI
 BINDTI: A bi-directional Intention network for drug-target interaction identification based on attention mechanisms.
 
-## Framework
-![BINDTI](image/BINDTI.png)
+
 
 ## System Requirements
 ```
